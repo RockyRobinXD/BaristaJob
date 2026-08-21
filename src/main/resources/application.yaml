@@ -1,3 +1,13 @@
 spring:
   application:
     name: BaristaJob
+  datasource:
+    url: jdbc:postgresql://localhost:6000/BaristaJobDB
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  profiles:
+    active: dev
