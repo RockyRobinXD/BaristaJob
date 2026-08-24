@@ -19,7 +19,6 @@ import static lombok.AccessLevel.PROTECTED;
 })
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@EqualsAndHashCode(exclude = "id")
 public class User {
     @Id
     @GeneratedValue(strategy = IDENTITY)

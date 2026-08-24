@@ -17,12 +17,10 @@ import static lombok.AccessLevel.PROTECTED;
 })
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@EqualsAndHashCode(exclude = "id")
 public class Vestiging {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Getter(NONE)
     private Long id;
 
     private String naam;

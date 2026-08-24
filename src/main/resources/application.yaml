@@ -1,6 +1,8 @@
 spring:
   application:
     name: BaristaJob
+  messages:
+    basename: i18n/messages
   datasource:
     url: ${DATABASE_URL}
     username: ${POSTGRES_USER}

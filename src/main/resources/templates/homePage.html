@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="nl" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{homepage.header}">BaristaJob – Overzicht</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        /* Responsive Wide Receipt Canvas for Dashboard */
+        body {
+            align-items: flex-start;
+            padding: 24px 16px;
+        }
+        .dashboard-canvas {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .ticket-wide {
+            width: 100%;
+            transform: none;
+            padding: 36px 32px;
+        }
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .user-info {
+            font-size: 11px;
+            color: var(--ink-soft);
+            text-align: right;
+        }
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            background: var(--paper-dark);
+            padding: 16px;
+            border-radius: 4px;
+            margin: 16px 0;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .filter-group label {
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            color: var(--ink-soft);
+            font-weight: 700;
+        }
+        .filter-group select {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            padding: 6px 8px;
+            border: 1.5px solid var(--ink);
+            background: var(--paper);
+            color: var(--ink);
+            border-radius: 2px;
+        }
+        .section-title {
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            margin: 24px 0 12px;
+            letter-spacing: 0.05em;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11.5px;
+            margin-bottom: 20px;
+        }
+        .data-table th, .data-table td {
+            padding: 10px 8px;
+            text-align: left;
+            border-bottom: 1px dashed var(--ink-soft);
+        }
+        .data-table th {
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            color: var(--ink-soft);
+            border-bottom: 1.5px solid var(--ink);
+        }
+        .table-link {
+            color: var(--copper);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        .table-link:hover {
+            text-decoration: underline;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 6px;
+            font-size: 9.5px;
+            border: 1px solid var(--ink);
+            border-radius: 2px;
+        }
+        .badge.active { background: #d4edda; color: #155724; border-color: #c3e6cb; }
+        .badge.inactive { background: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+        .flex-actions {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+    </style>
+</head>
+<body>
+<div class="scene dashboard-canvas">
+    <div class="steam" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="cup" aria-hidden="true"></div>
+
+    <main class="ticket ticket-wide" role="main">
+        <div class="perf-top" aria-hidden="true"></div>
+
+        <!-- Header / Auth Bar -->
+        <div class="header-bar">
+            <div>
+                <p class="brand" th:text="#{brand.title}">BARISTAJOB</p>
+                <p class="subbrand" th:text="#{brand.message}">DAGOVERZICHT & OPERATIES</p>
+            </div>
+            <div class="user-info">
+                <div sec:authorize="isAuthenticated()">
+                    <span th:text="#{user.logged_in_as}">INGELOGD ALS:</span>
+                    <strong sec:authentication="name">Gebruiker</strong>
+                    (<span sec:authentication="principal.authorities">[ROL]</span>)
+                    <form th:action="@{/logout}" method="post" style="display:inline; margin-left:6px;">
+                        <button type="submit" class="btn" style="display:inline; padding: 3px 8px; font-size: 9px;" th:text="#{user.logout}">UITLOGGEN</button>
+                    </form>
+                </div>
+                <div sec:authorize="isAnonymous()">
+                    <span th:text="#{user.anonymous}">ANONIEME BEZOEKER</span> —
+                    <a class="table-link" th:href="@{/login}" th:text="#{user.login}">INLOGGEN</a>
+                </div>
+            </div>
+        </div>
+
+        <hr class="rule">
+
+        <!-- Info Header Row -->
+        <div class="row">
+            <span>
+                <span th:text="#{date.message}">DATUM: </span>
+                <strong th:with="df=#{date.format.pattern}" th:text="${#temporals.format(#temporals.createNow(), df)}">24/08/2026</strong>
+            </span>
+            <span th:text="#{system.message}">SYSTEEM: ONLINE</span>
+        </div>
+
+        <hr class="rule">
+
+        <!-- Section 1: Vestigingen Overview -->
+        <h2 class="section-title" th:text="#{vestigingen.title}">VESTIGINGEN</h2>
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th th:text="#{vestiging.naam}">NAAM</th>
+                <th th:text="#{vestiging.stad}">STAD</th>
+                <th th:text="#{vestiging.zitplaatsen}">ZITPLAATSEN</th>
+                <th th:text="#{vestiging.actieve_baristas}">ACTIEVE BARISTA'S</th>
+                <th th:text="#{table.acties}">ACTIE</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="v : ${vestigingen}">
+                <td th:text="${v.naam}">Vestiging Centrum</td>
+                <td th:text="${v.stad}">Gent</td>
+                <td th:text="${v.aantalZitplaatsen}">45</td>
+                <td th:text="${v.aantalActieveBaristas}">8</td>
+                <td>
+                    <a class="table-link" th:href="@{/vestigingen/{id}(id=${v.id})}" th:text="#{action.details}">DETAILS &rarr;</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Section 2: Baristas Filtering & Sorting Form -->
+        <h2 class="section-title" th:text="#{baristas.title}">BARISTA'S</h2>
+
+        <form th:action="@{/overzicht}" method="get">
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label for="filter-stad" th:text="#{filter.stad}">STAD</label>
+                    <select id="filter-stad" name="stad">
+                        <option value="" th:text="#{filter.alle_steden}">-- Alle steden --</option>
+                        <option th:each="c : ${steden}" th:value="${c}" th:text="${c}" th:selected="${c == param.stad}"></option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="filter-actief" th:text="#{filter.status}">STATUS</label>
+                    <select id="filter-actief" name="actief">
+                        <option value="" th:text="#{filter.alle_status}">-- Alle --</option>
+                        <option value="true" th:selected="${param.actief == 'true'}" th:text="#{filter.actief}">Actief</option>
+                        <option value="false" th:selected="${param.actief == 'false'}" th:text="#{filter.inactief}">Inactief</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="filter-opleiding" th:text="#{filter.opleiding}">OPLEIDING</label>
+                    <select id="filter-opleiding" name="opleidingId">
+                        <option value="" th:text="#{filter.alle_opleidingen}">-- Alle opleidingen --</option>
+                        <option th:each="o : ${opleidingenOpties}" th:value="${o.id}" th:text="${o.titel}" th:selected="${o.id == param.opleidingId}"></option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="sort-by" th:text="#{filter.sorteren}">SORTEER OP</label>
+                    <select id="sort-by" name="sortBy">
+                        <option value="naam" th:selected="${param.sortBy == 'naam'}" th:text="#{sort.naam}">Naam</option>
+                        <option value="shifts" th:selected="${param.sortBy == 'shifts'}" th:text="#{sort.shifts}">Aantal shifts</option>
+                        <option value="geboortedatum" th:selected="${param.sortBy == 'geboortedatum'}" th:text="#{sort.geboortedatum}">Geboortedatum</option>
+                    </select>
+                </div>
+
+                <div class="flex-actions">
+                    <button type="submit" class="btn primary" style="width: 100%; font-size: 10px;" th:text="#{filter.toepassen}">FILTEREN</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Section 3: Baristas Table -->
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th th:text="#{barista.voornaam}">VOORNAAM</th>
+                <th sec:authorize="isAuthenticated()" th:text="#{barista.achternaam}">ACHTERNAAM</th>
+                <th th:text="#{barista.vestiging_stad}">VESTIGING STAD</th>
+                <th sec:authorize="isAuthenticated()" th:text="#{barista.shifts}">SHIFTS</th>
+                <th sec:authorize="isAuthenticated()" th:text="#{barista.geboortedatum}">GEBOORTEDATUM</th>
+                <th sec:authorize="isAuthenticated()" th:text="#{barista.status}">STATUS</th>
+                <th th:text="#{table.acties}">ACTIE</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="b : ${baristas}">
+                <td th:text="${b.voornaam}">Alex</td>
+
+                <!-- Full details visible only to authenticated users -->
+                <td sec:authorize="isAuthenticated()" th:text="${b.achternaam}">Peeters</td>
+                <td th:text="${b.stadVestiging}">Gent</td>
+                <td sec:authorize="isAuthenticated()" th:text="${b.aantalShifts}">12</td>
+                <td sec:authorize="isAuthenticated()" th:text="${#temporals.format(b.geboortedatum, 'dd/MM/yyyy')}">14/05/2001</td>
+                <td sec:authorize="isAuthenticated()">
+                    <span th:if="${b.actief}" class="badge active" th:text="#{status.ja}">JA</span>
+                    <span th:if="${!b.actief}" class="badge inactive" th:text="#{status.nee}">NEE</span>
+                </td>
+                <td>
+                    <a class="table-link" th:href="@{/baristas/{id}(id=${b.id})}" th:text="#{action.details}">DETAILS &rarr;</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Admin Quick Actions -->
+        <div sec:authorize="hasRole('ADMIN')" class="actions" style="margin-top: 24px;">
+            <a class="btn primary" th:href="@{/baristas/nieuw}" th:text="#{admin.add_barista}">+ BARISTA TOEVOEGEN</a>
+        </div>
+
+        <div class="barcode" aria-hidden="true"></div>
+        <p class="footer-note" th:text="#{app.footer}">BEDANKT VOOR JE BEZOEK — BARISTAJOB MANAGEMENT</p>
+
+        <div class="perf-bottom" aria-hidden="true"></div>
+    </main>
+</div>
+
+<script th:inline="javascript">
+    const barcode = document.querySelector('.barcode');
+    for (let i = 0; i < 48; i++) {
+        const bar = document.createElement('div');
+        bar.style.height = (10 + Math.random() * 16) + 'px';
+        bar.style.opacity = Math.random() > 0.15 ? '1' : '0.3';
+        barcode.appendChild(bar);
+    }
+</script>
+</body>
+</html>

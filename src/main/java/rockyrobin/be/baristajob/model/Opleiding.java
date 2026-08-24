@@ -16,7 +16,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "opleidingen")
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@EqualsAndHashCode(exclude = "id")
+//@EqualsAndHashCode(exclude = "id")
 public class Opleiding {
 
     @Id

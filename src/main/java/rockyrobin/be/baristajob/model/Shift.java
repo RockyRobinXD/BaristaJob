@@ -17,7 +17,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "shifts")
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@EqualsAndHashCode(exclude = "id")
+//@EqualsAndHashCode(exclude = "id")
 public class Shift {
 
     @Id
