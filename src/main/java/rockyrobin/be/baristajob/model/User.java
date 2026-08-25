@@ -22,7 +22,6 @@ import static lombok.AccessLevel.PROTECTED;
 public class User {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Getter(NONE)
     private Long id;
 
     private String voornaam;

@@ -22,7 +22,6 @@ public class Shift {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Getter(NONE)
     private Long id;
 
     private LocalDate datum;

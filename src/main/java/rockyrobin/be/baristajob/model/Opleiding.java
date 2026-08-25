@@ -21,7 +21,6 @@ public class Opleiding {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Getter(NONE)
     private Long id;
 
     private String titel;
