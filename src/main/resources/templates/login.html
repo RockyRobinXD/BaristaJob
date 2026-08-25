@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="nl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inloggen | BaristaJob</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="style.css">
+    <link rel="icon" type="image/svg+xml" th:href="@{/images/favicon.svg}" href="/images/favicon.svg">
+</head>
+<body>
+<div class="scene">
+    <div class="steam" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="cup" aria-hidden="true"></div>
+
+    <main class="ticket" role="main" aria-labelledby="login-title">
+        <div class="perf-top" aria-hidden="true"></div>
+
+        <p class="brand">BARISTAJOB</p>
+        <p class="subbrand">TOEGANGSBEWIJS</p>
+
+        <hr class="rule">
+
+        <h1 id="login-title" class="code" style="font-size: 36px; margin: 6px 0 2px;">INLOGGEN</h1>
+        <p class="status-line">GEEF JE GEGEVENS IN OM DOOR TE GAAN</p>
+
+        <!-- Error message -->
+        <div th:if="${param.error}"
+             style="margin: 12px 0; padding: 9px 12px; border: 1.5px solid var(--stamp-red); background: rgba(161,61,46,0.08);">
+            <p style="font-size: 10px; letter-spacing: 0.08em; color: var(--stamp-red); margin: 0;">
+                ✕ ONGELDIGE GEBRUIKERSNAAM OF WACHTWOORD
+            </p>
+        </div>
+
+        <!-- Logout message -->
+        <div th:if="${param.logout}"
+             style="margin: 12px 0; padding: 9px 12px; border: 1.5px solid var(--copper); background: rgba(185,121,63,0.08);">
+            <p style="font-size: 10px; letter-spacing: 0.08em; color: var(--copper); margin: 0;">
+                ✓ JE BENT SUCCESVOL UITGELOGD
+            </p>
+        </div>
+
+        <hr class="rule">
+
+        <form th:action="@{/login}" method="post" style="margin-top: 4px;">
+
+            <div style="margin-bottom: 14px;">
+                <label for="username"
+                       style="display:block; font-size:9.5px; letter-spacing:0.16em; color:var(--ink-soft); margin-bottom:5px;">
+                    GEBRUIKERSNAAM
+                </label>
+                <input type="text"
+                       id="username"
+                       name="username"
+                       autofocus
+                       autocomplete="username"
+                       required
+                       style="width:100%; font-family:'Space Mono',monospace; font-size:11px;
+                              letter-spacing:0.05em; padding:9px 10px;
+                              border:1.5px solid var(--ink); background:var(--paper-dark);
+                              color:var(--ink);">
+            </div>
+
+            <div style="margin-bottom: 6px;">
+                <label for="password"
+                       style="display:block; font-size:9.5px; letter-spacing:0.16em; color:var(--ink-soft); margin-bottom:5px;">
+                    WACHTWOORD
+                </label>
+                <input type="password"
+                       id="password"
+                       name="password"
+                       autocomplete="current-password"
+                       required
+                       style="width:100%; font-family:'Space Mono',monospace; font-size:11px;
+                              letter-spacing:0.05em; padding:9px 10px;
+                              border:1.5px solid var(--ink); background:var(--paper-dark);
+                              color:var(--ink);">
+            </div>
+
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <div class="actions" style="margin-top: 20px;">
+                <button type="submit" class="btn primary">INLOGGEN</button>
+                <a class="btn" th:href="@{/home}" href="index.html">← TERUG NAAR OVERZICHT</a>
+            </div>
+        </form>
+
+        <div class="stamp-wrap" style="margin-top: 18px;">
+            <span class="stamp">MEDEWERKERS ONLY</span>
+        </div>
+
+        <div class="barcode" aria-hidden="true" style="margin-top: 20px;"></div>
+        <p class="footer-note">BARISTAJOB — VEILIG INLOGGEN</p>
+
+        <div class="perf-bottom" aria-hidden="true"></div>
+    </main>
+</div>
+
+<script>
+    const barcode = document.querySelector('.barcode');
+    for (let i = 0; i < 34; i++) {
+        const bar = document.createElement('div');
+        bar.style.height = (10 + Math.random() * 16) + 'px';
+        bar.style.opacity = Math.random() > 0.15 ? '1' : '0.3';
+        barcode.appendChild(bar);
+    }
+</script>
+</body>
+</html>

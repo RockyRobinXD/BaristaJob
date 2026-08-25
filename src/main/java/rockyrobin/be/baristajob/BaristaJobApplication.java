@@ -15,6 +15,7 @@ public class BaristaJobApplication implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addRedirectViewController("/", "/home");
+        registry.addViewController("/login").setViewName("login");
     }
 
 }

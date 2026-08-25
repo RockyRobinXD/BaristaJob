@@ -31,6 +31,8 @@ public class User {
 
     private String email;
 
+    private String passwordHash;
+
     private LocalDate geboortedatum;
 
     private String studentenkaartNummer;
@@ -52,10 +54,11 @@ public class User {
     @ManyToMany
     private Set<Shift> shifts = new HashSet<>();
 
-    public User(String voornaam, String achternaam, String email, LocalDate geboortedatum, String studentenkaartNummer, boolean actief, UserRole userRole) {
+    public User(String voornaam, String achternaam, String email, String passwordHash, LocalDate geboortedatum, String studentenkaartNummer, boolean actief, UserRole userRole) {
         this.voornaam = voornaam;
         this.achternaam = achternaam;
         this.email = email;
+        this.passwordHash = passwordHash;
         this.geboortedatum = geboortedatum;
         this.studentenkaartNummer = studentenkaartNummer;
         this.actief = actief;

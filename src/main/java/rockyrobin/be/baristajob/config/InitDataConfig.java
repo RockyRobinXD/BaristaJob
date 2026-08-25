@@ -3,6 +3,7 @@ package rockyrobin.be.baristajob.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import rockyrobin.be.baristajob.model.*;
 import rockyrobin.be.baristajob.repository.OpleidingRepository;
@@ -23,6 +24,7 @@ public class InitDataConfig implements CommandLineRunner {
     private final VestigingRepository vestigingRepository;
     private final OpleidingRepository opleidingRepository;
     private final ShiftRepository shiftRepository;
+    private final BCryptPasswordEncoder passwordBCryptEncoder;
 
     @Override
     public void run(String... args) throws Exception {
@@ -75,10 +77,12 @@ public class InitDataConfig implements CommandLineRunner {
         // --- Users: 1 admin + 5 barista's ---
         User admin = new User(
                 "Sophie", "Van Damme", "sophie.vandamme@baristajob.be",
+                passwordBCryptEncoder.encode("BaristaJob"),
                 LocalDate.of(1990, 4, 12), "99999999", true, UserRole.ADMIN);
 
         User emma = new User(
                 "Emma", "Peeters", "emma.peeters@baristajob.be",
+                passwordBCryptEncoder.encode("BaristaJob"),
                 LocalDate.of(2004, 3, 10), "10293847", true, UserRole.BARISTA);
         emma.setVestiging(gent);
         emma.addOpleiding(latteArt);
@@ -87,6 +91,7 @@ public class InitDataConfig implements CommandLineRunner {
 
         User lucas = new User(
                 "Lucas", "Willems", "lucas.willems@baristajob.be",
+                passwordBCryptEncoder.encode("BaristaJob"),
                 LocalDate.of(2005, 7, 22), "11223344", true, UserRole.BARISTA);
         lucas.setVestiging(gent);
         lucas.addOpleiding(baristaBasics);
@@ -95,6 +100,7 @@ public class InitDataConfig implements CommandLineRunner {
 
         User noor = new User(
                 "Noor", "El Amrani", "noor.elamrani@baristajob.be",
+                passwordBCryptEncoder.encode("BaristaJob"),
                 LocalDate.of(2003, 11, 2), "22334455", true, UserRole.BARISTA);
         noor.setVestiging(antwerpen);
         noor.addOpleiding(klantvriendelijkheid);
@@ -102,12 +108,14 @@ public class InitDataConfig implements CommandLineRunner {
 
         User finn = new User(
                 "Finn", "De Backer", "finn.debacker@baristajob.be",
+                passwordBCryptEncoder.encode("BaristaJob"),
                 LocalDate.of(2006, 1, 18), "33445566", false, UserRole.BARISTA);
         finn.setVestiging(leuven);
         // inactieve barista: bewust geen shifts of opleidingen
 
         User yara = new User(
                 "Yara", "Haddad", "yara.haddad@baristajob.be",
+                passwordBCryptEncoder.encode("BaristaJob"),
                 LocalDate.of(2002, 5, 30), "44556677", true, UserRole.BARISTA);
         yara.setVestiging(antwerpen);
         yara.addOpleiding(latteArt);
